@@ -22,12 +22,19 @@ class Protein(object):
         accession = entry_str[start_index: entry_str.find(';', start_index)]
 
         # parse annotation(s)
-        start_index = entry_str.find('DR   ')
-        annot = CHE550_tools.got.GOAnnotation.init_parse(entry_str[start_index: entry_str.find('\n', start_index)])
+        start_index = entry_str.find('DR   GO')
+        annots = list()
 
+        while start_index != -1:
+            annot = CHE550_tools.got.GOAnnotation.init_parse(entry_str[start_index: entry_str.find('\n', start_index)])
+            annots.append(annot)
+
+            start_index = entry_str.find('DR   GO', start_index + 1)
+
+        # parse seq
         seq = 'ABC'
 
-        return cls(id, accession, seq, annot)
+        return cls(id, accession, seq, annots)
 
     def __len__(self):
         return len(self.sequence)
