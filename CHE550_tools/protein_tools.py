@@ -11,7 +11,7 @@ class Protein(object):
         self.annotations = annot
 
     @classmethod
-    def init_parse(cls, entry_str):
+    def init_txt_parse(cls, entry_str):
 
         # parse id
         start_index = entry_str.find('ID   ') + 5
@@ -35,6 +35,18 @@ class Protein(object):
         seq = 'ABC'
 
         return cls(id, accession, seq, annots)
+
+    @classmethod
+    def init_fasta_parse(cls, fasta_str):
+
+        ac_s = fasta_str.find('|') + 1
+        ac_e = fasta_str.find('|', ac_s + 1)
+
+        accession = fasta_str[ac_s: ac_e]
+        id = fasta_str[ac_e + 1: fasta_str.find(' ') + 1]
+        seq = fasta_str[fasta_str.find('\n'):]
+
+        return cls(id, accession, seq, None)
 
     def __len__(self):
         return len(self.sequence)

@@ -3,18 +3,18 @@ import os
 import sys
 
 curr_path = os.path.realpath(__file__)
-CHE550_path = curr_path[: curr_path.find('\\', curr_path.find("CHE550-master"))]
+CHE550_path = curr_path[: curr_path.find('\\', curr_path.find("CHE550"))]
 sys.path.append(CHE550_path)
 
 import CHE550_tools
 
 if __name__ == '__main__':
-    d_amino_acids, rq_time = CHE550_tools.ut.retrieve_from_uniprot('txt', reviewed='yes', keyword='208')
+    d_amino_acids, rq_time = CHE550_tools.ut.batch_retrieve_from_uniprot('txt', reviewed='yes', keyword='208')
     d_amino_acids_list = CHE550_tools.ut.uniport_txt_parser(d_amino_acids)
 
     peptides = list()
     for d_amino_acid in d_amino_acids_list:
-        peptides.append(CHE550_tools.pt.Protein.init_parse(d_amino_acid))
+        peptides.append(CHE550_tools.pt.Protein.init_txt_parse(d_amino_acid))
 
     functions = list()
     for pep in peptides:

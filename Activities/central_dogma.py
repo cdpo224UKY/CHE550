@@ -3,7 +3,7 @@ import os
 import sys
 
 curr_path = os.path.realpath(__file__)
-CHE550_path = curr_path[: curr_path.find('\\', curr_path.find("CHE550-master"))]
+CHE550_path = curr_path[: curr_path.find('\\', curr_path.find("CHE550"))]
 sys.path.append(CHE550_path)
 
 import CHE550_tools

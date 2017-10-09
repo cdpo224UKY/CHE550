@@ -5,13 +5,51 @@ This module contains a number of functions and classes to deal with retrieving f
 """
 
 
-def retrieve_from_uniprot(format, **kwargs):
+def entry_retrieve_from_uniprot(format, accession):
     """
     Method for retrieving data from the UniProt database.
 
     :param format: file format for data to be retrieved in
     :type format: str
-    :param \**kwargs:
+    :param accession: UniProt accession number
+    :type accession: str
+
+    :returns:
+        * *entries_str* (str) --
+            string of the data retrieved from UniProt
+        * *request_datetime* (str) --
+            string of the date and time when UniProt was queried
+    """
+    from urllib import request, error
+    from datetime import datetime
+
+    # determining the time of request (used for naming purposes)
+    request_datetime = str(datetime.now()).replace(' ', '_').replace('.', '_')
+
+    # creation of query string
+    query_str = "http://www.uniprot.org/uniprot/?query="
+    query_str += accession
+    query_str += '&format=' + format
+
+    # request API
+    try:
+        with request.urlopen(query_str) as request:
+            entries_str = request.read().decode('utf-8')  # the retrieved data must be formatted into utf-8
+
+    except error.HTTPError as err:
+        print(err)
+        return None, None
+
+    return entries_str, request_datetime
+
+
+def batch_retrieve_from_uniprot(format, **kwargs):
+    """
+    Method for retrieving data from the UniProt database.
+
+    :param format: file format for data to be retrieved in
+    :type format: str
+    :param **kwargs:
         See below
     :keyword Arguments:
         * *keyword* (int) --
