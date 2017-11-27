@@ -88,6 +88,8 @@ def batch_retrieve_from_uniprot(format, **kwargs):
 
     query_str += '&format=' + format
 
+    print(query_str)
+
     # request API
     try:
         with request.urlopen(query_str) as request:
