@@ -10,7 +10,7 @@ import CHE550_tools
 
 if __name__ == '__main__':
     d_amino_acids, rq_time = CHE550_tools.ut.batch_retrieve_from_uniprot('txt', reviewed='yes', keyword='208')
-    d_amino_acids_list = CHE550_tools.ut.uniport_txt_parser(d_amino_acids)
+    d_amino_acids_list = CHE550_tools.ut.uniprot_txt_parser(d_amino_acids)
 
     peptides = list()
     for d_amino_acid in d_amino_acids_list:

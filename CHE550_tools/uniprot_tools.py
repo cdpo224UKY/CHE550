@@ -102,7 +102,20 @@ def batch_retrieve_from_uniprot(format, **kwargs):
     return entries_str, request_datetime
 
 
-def uniport_txt_parser(entries_str):
+def uniprot_fasta_parser(entries_str):
+
+    fasta_list = list()
+    start_index = 0
+
+    while entries_str.find('>sp|', start_index) != -1:
+        end_index = entries_str.find('>sp|', start_index + 1)
+        fasta_list.append(entries_str[start_index: end_index])
+        start_index = end_index
+
+    return fasta_list
+
+
+def uniprot_txt_parser(entries_str):
     """
 
     :param entries_str:

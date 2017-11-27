@@ -2,6 +2,7 @@
 """
 This module contains a number of functions to deal with manipulation of DNA sequence data.
 """
+import re
 
 
 def replication(DNA_str):
@@ -49,3 +50,9 @@ def transcribe(DNA_str):
 
     return RNA_str
 
+
+def find_dimer_sites(DNA_str):
+
+    indexes = [r.start() + 1 for r in re.finditer('(?=TT)', DNA_str)]
+
+    return indexes
