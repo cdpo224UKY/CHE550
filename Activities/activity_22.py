@@ -6,7 +6,7 @@ curr_path = os.path.realpath(__file__)
 CHE550_path = curr_path[: curr_path.find('\\', curr_path.find("CHE550"))]
 sys.path.append(CHE550_path)
 
-identifiers = (
+identifiers = [
     ">1 dna:chromosome chromosome:GRCh38:1:1:248956422:1 REF",
     ">10 dna:chromosome chromosome:GRCh38:10:1:133797422:1 REF",
     ">11 dna:chromosome chromosome:GRCh38:11:1:135086622:1 REF",
@@ -29,39 +29,35 @@ identifiers = (
     ">7 dna:chromosome chromosome:GRCh38:7:1:159345973:1 REF",
     ">8 dna:chromosome chromosome:GRCh38:8:1:145138636:1 REF",
     ">9 dna:chromosome chromosome:GRCh38:9:1:138394717:1 REF",
-    ">MT dna:chromosome chromosome:GRCh38:MT:1:16569:1 REF",
     ">X dna:chromosome chromosome:GRCh38:X:1:156040895:1 REF",
     ">Y dna:chromosome chromosome:GRCh38:Y:2781480:56887902:1 REF"
-)
+]
 
 if __name__ == '__main__':
 
-    chromosomes = dict()
-    chrom_id = str()
+    sites = 0
+    line_end = ""
 
     with open('F:/Homo_sapiens.GRCh38.dna.primary_assembly.fa', 'r') as f:
-
         for line in f:
-            # found header for chromosome
-            if any(ident in line for ident in identifiers):
-                if chrom_id:
-                    print(chromosomes[chrom_id][0] / sum(chromosomes[chrom_id]),
-                          chromosomes[chrom_id][1] / sum(chromosomes[chrom_id]),
-                          sum(chromosomes[chrom_id]))
+            if '>' in line:
+                print("Number of sites: " + str(sites))
                 print(line, end='')
-                chrom_id = line
-                chromosomes[chrom_id] = [0, 0]
-            # found other header
-            elif '>' in line:
-                if chrom_id:
-                    print(chromosomes[chrom_id][0]/sum(chromosomes[chrom_id]),
-                          chromosomes[chrom_id][1]/sum(chromosomes[chrom_id]),
-                          sum(chromosomes[chrom_id]))
-                chrom_id = str()
-            elif chrom_id:
-                # A or T
-                chromosomes[chrom_id][0] += line.count('A')
-                chromosomes[chrom_id][0] += line.count('T')
-                # G or C
-                chromosomes[chrom_id][1] += line.count('G')
-                chromosomes[chrom_id][1] += line.count('C')
+            if '>' in line and not any(ident in line for ident in identifiers):
+                print(line, end='')
+                break
+            elif '>' not in line:
+                new_line = line_end + line
+                sites += new_line.count('ATG')
+                sites += new_line.count('CAT')
+
+                if 'A\n' in line:
+                    line_end = 'A'
+                elif 'AT\n' in line:
+                    line_end = 'AT'
+                elif 'C\n' in line:
+                    line_end = 'C'
+                elif 'CA\n' in line:
+                    line_end = 'CA'
+                else:
+                    line_end = ""

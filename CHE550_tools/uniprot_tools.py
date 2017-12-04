@@ -3,6 +3,8 @@
 This module contains a number of functions and classes to deal with retrieving from and interacting with the UniProt
 (SwissProt) knowledgebase.
 """
+from urllib import request, error
+from datetime import datetime
 
 
 def entry_retrieve_from_uniprot(format, accession):
@@ -20,9 +22,6 @@ def entry_retrieve_from_uniprot(format, accession):
         * *request_datetime* (str) --
             string of the date and time when UniProt was queried
     """
-    from urllib import request, error
-    from datetime import datetime
-
     # determining the time of request (used for naming purposes)
     request_datetime = str(datetime.now()).replace(' ', '_').replace('.', '_')
 
@@ -33,8 +32,8 @@ def entry_retrieve_from_uniprot(format, accession):
 
     # request API
     try:
-        with request.urlopen(query_str) as request:
-            entries_str = request.read().decode('utf-8')  # the retrieved data must be formatted into utf-8
+        with request.urlopen(query_str) as req:
+            entries_str = req.read().decode('utf-8')  # the retrieved data must be formatted into utf-8
 
     except error.HTTPError as err:
         print(err)
@@ -65,9 +64,6 @@ def batch_retrieve_from_uniprot(format, **kwargs):
         * *request_datetime* (str) --
             string of the date and time when UniProt was queried
     """
-    from urllib import request, error
-    from datetime import datetime
-
     # determining the time of request (used for naming purposes)
     request_datetime = str(datetime.now()).replace(' ', '_').replace('.', '_')
 
@@ -92,8 +88,8 @@ def batch_retrieve_from_uniprot(format, **kwargs):
 
     # request API
     try:
-        with request.urlopen(query_str) as request:
-            entries_str = request.read().decode('utf-8')  # the retrieved data must be formatted into utf-8
+        with request.urlopen(query_str) as req:
+            entries_str = req.read().decode('utf-8')  # the retrieved data must be formatted into utf-8
 
     except error.HTTPError as err:
         print(err)
